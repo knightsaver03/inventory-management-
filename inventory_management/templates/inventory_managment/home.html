@@ -1,0 +1,28 @@
+{% comment %} {% extends "inventory_management/base.html" %}
+
+{% block title %}Home - Inventory Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <!-- Exard Card -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Exard</h5>
+                <p class="card-text">All product data from the master sheet.</p>
+                <a href="{% url 'exard_list' %}" class="btn btn-primary">View Exard</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <!-- Assembly Card -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Assembly</h5>
+                <p class="card-text">Use products and view live analysis.</p>
+                <a href="{% url 'assembly' %}" class="btn btn-success">Go to Assembly</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}  {% endcomment %}
