@@ -1,0 +1,46 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.log
+
+# === Django DB Files ===
+*.sqlite3
+
+# === Environment Variables ===
+.env
+.env.*
+
+# === Virtual Environments ===
+.venv/
+venv/
+ENV/
+env/
+
+# === VS Code ===
+.vscode/
+*.code-workspace
+
+# === Cursor + Editor Configs ===
+.cursor/
+cursor/
+*.json
+
+# === Node & Frontend (if added later) ===
+node_modules/
+package-lock.json
+yarn.lock
+
+# === Static & Media (collected/generated files) ===
+staticfiles/
+media/
+static/
+media/
+
+# === OS & Misc ===
+.DS_Store
+Thumbs.db
+.idea/
+*.bak

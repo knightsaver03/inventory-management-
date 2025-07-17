@@ -1,0 +1,104 @@
+{% extends "inventory_management/base.html" %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="text-center mb-4">
+        <h2 class="mb-3">{{ greeting }}, <span class="text-primary fw-bold">{{ admin_name }}</span>!</h2>
+        <p class="lead mt-3">Welcome to your admin dashboard. Here you can manage users for your project, add new team members, or remove users who no longer need access. Use the buttons below to get started.</p>
+    </div>
+    {% if error_message %}
+        <div class="alert alert-danger w-100 text-center" style="max-width: 500px;">{{ error_message }}</div>
+    {% endif %}
+    <div class="d-flex gap-3 mt-4">
+        <button class="btn btn-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <i class="bi bi-person-plus me-2"></i>Add User
+        </button>
+        <button class="btn btn-danger btn-lg px-4" data-bs-toggle="modal" data-bs-target="#removeUserModal">
+            <i class="bi bi-person-dash me-2"></i>Remove User
+        </button>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade{% if show_add_user_modal %} show d-block{% endif %}" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true" {% if show_add_user_modal %}style="display:block; background:rgba(0,0,0,0.5);"{% endif %}>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" action="{% url 'add_user' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="project" class="form-label">Project Type</label>
+            <select class="form-select" id="project" name="project" required>
+              <option value="" disabled selected>Select a project type</option>
+              <option value="inventory_analysis">Inventory Analysis</option>
+              {% comment %} {% for project_type in project_types %}
+                <option value="{{ project_type.id }}">{{ project_type.name }}</option>
+              {% endfor %} {% endcomment %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <div class="mb-3">
+            <label for="confirm_password" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Remove User Modal -->
+<div class="modal fade" id="removeUserModal" tabindex="-1" aria-labelledby="removeUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeUserModalLabel">Remove User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" action="{% url 'remove_user' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="project_remove" class="form-label">Project</label>
+            <input type="text" class="form-control" id="project_remove" name="project" required>
+          </div>
+          <div class="mb-3">
+            <label for="username_remove" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username_remove" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="password_remove" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password_remove" name="password" required>
+          </div>
+          <div class="mb-3">
+            <label for="confirm_password_remove" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="confirm_password_remove" name="confirm_password" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-danger">Remove</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %} 
