@@ -4,7 +4,11 @@ from django.contrib.auth.decorators import login_required
 import pytz
 from datetime import datetime
 from django.contrib.auth.models import User
-from .models import ProjectType, AddUserSubmission
+from .models import ProjectType, AddUser
+import pandas as pd
+from .searilizer import ImportExcelData
+# from rest_framework.parsers import MultiPartParser, FormParser
+# from .models import AddUserSubmission
 
 # Create your views here.
 
@@ -12,7 +16,19 @@ def startup_view(request):
     return render(request, 'inventory_management/home.html')
 
 def login_view(request):
-    return render(request, 'inventory_management/login.html')
+    error_message = None
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            user = AddUser.objects.get(username=username, password=password)
+            # Set session variable to mark user as logged in
+            request.session['adduser_id'] = user.id
+            request.session['adduser_username'] = user.username
+            return redirect('inventory_form')  # Change to your inventory form view name
+        except AddUser.DoesNotExist:
+            error_message = 'Invalid username or password.'
+    return render(request, 'inventory_management/login.html', {'error_message': error_message})
 
 def admin_login_view(request):
     error_message = None
@@ -88,7 +104,7 @@ def add_user_view(request):
             from .models import ProjectAssignment
             ProjectAssignment.objects.create(user=user, project_type=project_type)
         # Save the Add User form submission
-        AddUserSubmission.objects.create(project_type=project_type, username=username)
+        # AddUserSubmission.objects.create(project_type=project_type, username=username)
         return redirect('admin_dashboard')
     return redirect('admin_dashboard')
 
@@ -125,3 +141,15 @@ def remove_user_view(request):
             'greeting': greeting
         })
     return redirect('admin_dashboard')
+
+def inventory_form_view(request):
+    # Optionally, check if user is logged in via session
+    if not request.session.get('adduser_id'):
+        return redirect('login')
+    if request.method == 'POST':
+        alpha_number = request.POST.get('alpha_number')
+        quantity = request.POST.get('quantity')
+        # Save to database logic here
+        # ...
+        return render(request, 'inventory_management/inventoryform.html', {'success': True})
+    return render(request, 'inventory_management/inventoryform.html')
